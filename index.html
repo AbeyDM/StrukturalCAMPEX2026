@@ -568,430 +568,61 @@
         }
         #job-modal .close-modal { float:right; cursor:pointer; font-weight:700; padding:4px 8px; border-radius:6px; background:#eee; }
 
-        /* timeline-section styles */
-        .timeline-section {
-          margin-top: 36px;
-          background: linear-gradient(180deg,#ffffff 0%, #fbfdff 100%);
-          padding: 26px;
-          border-radius: 12px;
-          box-shadow: 0 10px 30px rgba(10,20,30,0.06);
-        }
-        .timeline-header {
-          display:flex;
-          justify-content:space-between;
-          align-items:center;
-          gap:12px;
-          margin-bottom:18px;
-        }
-        .timeline-header h2 { font-size:1.2rem; margin:0; color:#072b2a; }
-        .timeline-header .badge { font-weight:700; padding:6px 10px; border-radius:999px; color:#fff; font-size:0.9rem; }
-        .badge.urgent { background:#d93b3b; box-shadow: 0 6px 18px rgba(217,59,59,0.12); }
-        .badge.ongoing { background:#e5a400; box-shadow: 0 6px 18px rgba(229,164,0,0.08); }
-        .badge.ready { background:#27ae60; box-shadow:0 6px 18px rgba(39,174,96,0.08); }
-        .phase-grid { display:grid; grid-template-columns:1fr; gap:12px; margin-top:12px; }
-        .phase-card { background:#fff; border-radius:10px; padding:14px; box-shadow:0 6px 18px rgba(6,38,34,0.03); }
-        .phase-meta { display:flex; gap:12px; align-items:center; justify-content:space-between; flex-wrap:wrap; }
-        .phase-meta .when { color:#07514d; font-weight:700; }
-        .division-tasks { display:grid; grid-template-columns: repeat(auto-fit,minmax(260px,1fr)); gap:12px; margin-top:12px; }
-        .div-box { background:linear-gradient(180deg,#fbfffb, #fff); padding:10px; border-radius:8px; border:1px solid rgba(5,107,27,0.06); }
-        .div-box h4 { margin:0 0 8px 0; font-size:0.95em; color:#074; }
-        .div-box ul { margin:0; padding-left:18px; font-size:0.92em; color:#273; }
-        .status-line { font-size:0.92em; color:#444; margin-top:8px; }
-        .cta-row { display:flex; gap:8px; margin-top:10px; flex-wrap:wrap; }
-        .btn-small { background:#056b4f; color:#fff; padding:6px 10px; border-radius:8px; cursor:pointer; font-weight:700; font-size:0.9rem; border:none; }
+        /* visual & animation enhancements */
+@keyframes pulse {
+  0% { transform: scale(1); box-shadow: 0 6px 18px rgba(217,59,59,0.08); }
+  50% { transform: scale(1.06); box-shadow: 0 18px 40px rgba(217,59,59,0.14); }
+  100% { transform: scale(1); box-shadow: 0 6px 18px rgba(217,59,59,0.08); }
+}
 
-        @media (max-width:720px) {
-          .timeline { padding-left:12px; }
-          .timeline-icon { left:-30px; top:12px; width:24px; height:24px; font-size:0.8rem; }
-        }
+.animate-reveal {
+  opacity: 0;
+  transform: translateY(18px) scale(.995);
+  transition: opacity .7s cubic-bezier(.2,.9,.2,1), transform .7s cubic-bezier(.2,.9,.2,1);
+}
 
-        @media (max-width: 1200px) {
-            .divisi-container {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
+.animate-reveal.in-view {
+  opacity: 1;
+  transform: none;
+}
 
-        @media (max-width: 768px) {
-            .divisi-container {
-                grid-template-columns: 1fr;
-            }
+/* subtle entrance for phase-card children */
+.phase-card .div-box { transform: translateY(10px); opacity:0; transition: transform .45s ease, opacity .45s ease; }
+.phase-card.in-view .div-box { transform: translateY(0); opacity:1; }
 
-            .header h1 {
-                font-size: 1.8em;
-            }
+/* urgent badge pulse to draw perhatian */
+.badge.urgent { animation: pulse 2s infinite; transform-origin:center; }
 
-            .position-box.level1 {
-                min-width: 250px;
-            }
+/* modal open animation */
+#job-modal .job-body {
+  transform: translateY(10px) scale(.99);
+  opacity: 0;
+  transition: transform .22s ease, opacity .22s ease;
+}
+#job-modal .job-body.open {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+}
 
-            .button-group {
-                flex-direction: column;
-            }
+/* hover-tilt smoothing (JS akan menulis transform inline) */
+.position-box {
+  will-change: transform;
+  transition: box-shadow .18s ease, transform .18s ease;
+}
 
-            .btn {
-                width: 100%;
-            }
-
-            #organigram-container {
-                padding: 30px 20px;
-            }
-        }
-
-        @media print {
-            body {
-                background: white;
-                padding: 0;
-            }
-
-            .button-group {
-                display: none;
-            }
-
-            #organigram-container {
-                box-shadow: none;
-                border-radius: 0;
-                padding: 40px;
-            }
-        }
-
-        /* modal styles */
-        #job-modal {
-          position: fixed; inset: 0; display: none; align-items: center; justify-content: center;
-          background: rgba(0,0,0,0.6); z-index: 9999; padding: 20px;
-        }
-        #job-modal .job-body {
-          background: #fff; color:#111; max-width:700px; width:100%; max-height:86vh; overflow:auto;
-          border-radius:10px; padding:20px; box-shadow:0 20px 60px rgba(0,0,0,0.4);
-          font-size: 14px;            /* lebih kecil */
-          text-align: center;         /* pusatkan teks paragraf/heading */
-          line-height: 1.45;
-          font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-        }
-        #job-modal .job-body h3 { margin-top:0; font-size:1.15em; text-align:center; }
-        #job-modal .job-body .job-content p { text-align:center; margin:8px 0; }
-        #job-modal .job-body .job-content ul {
-          text-align: left;           /* isi list tetap rata kiri untuk keterbacaan */
-          display: inline-block;      /* letakkan daftar sebagai blok yang terpusat */
-          margin: 12px auto;
-          padding-left: 20px;
-        }
-        #job-modal .job-body .job-content ul li {
-          font-size: 13.5px;
-          margin-bottom: 6px;
-        }
-        #job-modal .close-modal { float:right; cursor:pointer; font-weight:700; padding:4px 8px; border-radius:6px; background:#eee; }
-
-        /* timeline-section styles */
-        .timeline-section {
-          margin-top: 36px;
-          background: linear-gradient(180deg,#ffffff 0%, #fbfdff 100%);
-          padding: 26px;
-          border-radius: 12px;
-          box-shadow: 0 10px 30px rgba(10,20,30,0.06);
-        }
-        .timeline-header {
-          display:flex;
-          justify-content:space-between;
-          align-items:center;
-          gap:12px;
-          margin-bottom:18px;
-        }
-        .timeline-header h2 { font-size:1.2rem; margin:0; color:#072b2a; }
-        .timeline-header .badge { font-weight:700; padding:6px 10px; border-radius:999px; color:#fff; font-size:0.9rem; }
-        .badge.urgent { background:#d93b3b; box-shadow: 0 6px 18px rgba(217,59,59,0.12); }
-        .badge.ongoing { background:#e5a400; box-shadow: 0 6px 18px rgba(229,164,0,0.08); }
-        .badge.ready { background:#27ae60; box-shadow:0 6px 18px rgba(39,174,96,0.08); }
-        .phase-grid { display:grid; grid-template-columns:1fr; gap:12px; margin-top:12px; }
-        .phase-card { background:#fff; border-radius:10px; padding:14px; box-shadow:0 6px 18px rgba(6,38,34,0.03); }
-        .phase-meta { display:flex; gap:12px; align-items:center; justify-content:space-between; flex-wrap:wrap; }
-        .phase-meta .when { color:#07514d; font-weight:700; }
-        .division-tasks { display:grid; grid-template-columns: repeat(auto-fit,minmax(260px,1fr)); gap:12px; margin-top:12px; }
-        .div-box { background:linear-gradient(180deg,#fbfffb, #fff); padding:10px; border-radius:8px; border:1px solid rgba(5,107,27,0.06); }
-        .div-box h4 { margin:0 0 8px 0; font-size:0.95em; color:#074; }
-        .div-box ul { margin:0; padding-left:18px; font-size:0.92em; color:#273; }
-        .status-line { font-size:0.92em; color:#444; margin-top:8px; }
-        .cta-row { display:flex; gap:8px; margin-top:10px; flex-wrap:wrap; }
-        .btn-small { background:#056b4f; color:#fff; padding:6px 10px; border-radius:8px; cursor:pointer; font-weight:700; font-size:0.9rem; border:none; }
-
-        @media (max-width:720px) {
-          .timeline { padding-left:12px; }
-          .timeline-icon { left:-30px; top:12px; width:24px; height:24px; font-size:0.8rem; }
-        }
-
-        @media (max-width: 1200px) {
-            .divisi-container {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        @media (max-width: 768px) {
-            .divisi-container {
-                grid-template-columns: 1fr;
-            }
-
-            .header h1 {
-                font-size: 1.8em;
-            }
-
-            .position-box.level1 {
-                min-width: 250px;
-            }
-
-            .button-group {
-                flex-direction: column;
-            }
-
-            .btn {
-                width: 100%;
-            }
-
-            #organigram-container {
-                padding: 30px 20px;
-            }
-        }
-
-        @media print {
-            body {
-                background: white;
-                padding: 0;
-            }
-
-            .button-group {
-                display: none;
-            }
-
-            #organigram-container {
-                box-shadow: none;
-                border-radius: 0;
-                padding: 40px;
-            }
-        }
-
-        /* modal styles */
-        #job-modal {
-          position: fixed; inset: 0; display: none; align-items: center; justify-content: center;
-          background: rgba(0,0,0,0.6); z-index: 9999; padding: 20px;
-        }
-        #job-modal .job-body {
-          background: #fff; color:#111; max-width:700px; width:100%; max-height:86vh; overflow:auto;
-          border-radius:10px; padding:20px; box-shadow:0 20px 60px rgba(0,0,0,0.4);
-          font-size: 14px;            /* lebih kecil */
-          text-align: center;         /* pusatkan teks paragraf/heading */
-          line-height: 1.45;
-          font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-        }
-        #job-modal .job-body h3 { margin-top:0; font-size:1.15em; text-align:center; }
-        #job-modal .job-body .job-content p { text-align:center; margin:8px 0; }
-        #job-modal .job-body .job-content ul {
-          text-align: left;           /* isi list tetap rata kiri untuk keterbacaan */
-          display: inline-block;      /* letakkan daftar sebagai blok yang terpusat */
-          margin: 12px auto;
-          padding-left: 20px;
-        }
-        #job-modal .job-body .job-content ul li {
-          font-size: 13.5px;
-          margin-bottom: 6px;
-        }
-        #job-modal .close-modal { float:right; cursor:pointer; font-weight:700; padding:4px 8px; border-radius:6px; background:#eee; }
-
-        /* timeline-section styles */
-        .timeline-section {
-          margin-top: 36px;
-          background: linear-gradient(180deg,#ffffff 0%, #fbfdff 100%);
-          padding: 26px;
-          border-radius: 12px;
-          box-shadow: 0 10px 30px rgba(10,20,30,0.06);
-        }
-        .timeline-header {
-          display:flex;
-          justify-content:space-between;
-          align-items:center;
-          gap:12px;
-          margin-bottom:18px;
-        }
-        .timeline-header h2 { font-size:1.2rem; margin:0; color:#072b2a; }
-        .timeline-header .badge { font-weight:700; padding:6px 10px; border-radius:999px; color:#fff; font-size:0.9rem; }
-        .badge.urgent { background:#d93b3b; box-shadow: 0 6px 18px rgba(217,59,59,0.12); }
-        .badge.ongoing { background:#e5a400; box-shadow: 0 6px 18px rgba(229,164,0,0.08); }
-        .badge.ready { background:#27ae60; box-shadow:0 6px 18px rgba(39,174,96,0.08); }
-        .phase-grid { display:grid; grid-template-columns:1fr; gap:12px; margin-top:12px; }
-        .phase-card { background:#fff; border-radius:10px; padding:14px; box-shadow:0 6px 18px rgba(6,38,34,0.03); }
-        .phase-meta { display:flex; gap:12px; align-items:center; justify-content:space-between; flex-wrap:wrap; }
-        .phase-meta .when { color:#07514d; font-weight:700; }
-        .division-tasks { display:grid; grid-template-columns: repeat(auto-fit,minmax(260px,1fr)); gap:12px; margin-top:12px; }
-        .div-box { background:linear-gradient(180deg,#fbfffb, #fff); padding:10px; border-radius:8px; border:1px solid rgba(5,107,27,0.06); }
-        .div-box h4 { margin:0 0 8px 0; font-size:0.95em; color:#074; }
-        .div-box ul { margin:0; padding-left:18px; font-size:0.92em; color:#273; }
-        .status-line { font-size:0.92em; color:#444; margin-top:8px; }
-        .cta-row { display:flex; gap:8px; margin-top:10px; flex-wrap:wrap; }
-        .btn-small { background:#056b4f; color:#fff; padding:6px 10px; border-radius:8px; cursor:pointer; font-weight:700; font-size:0.9rem; border:none; }
-
-        @media (max-width:720px) {
-          .timeline { padding-left:12px; }
-          .timeline-icon { left:-30px; top:12px; width:24px; height:24px; font-size:0.8rem; }
-        }
-
-        @media (max-width: 1200px) {
-            .divisi-container {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        @media (max-width: 768px) {
-            .divisi-container {
-                grid-template-columns: 1fr;
-            }
-
-            .header h1 {
-                font-size: 1.8em;
-            }
-
-            .position-box.level1 {
-                min-width: 250px;
-            }
-
-            .button-group {
-                flex-direction: column;
-            }
-
-            .btn {
-                width: 100%;
-            }
-
-            #organigram-container {
-                padding: 30px 20px;
-            }
-        }
-
-        @media print {
-            body {
-                background: white;
-                padding: 0;
-            }
-
-            .button-group {
-                display: none;
-            }
-
-            #organigram-container {
-                box-shadow: none;
-                border-radius: 0;
-                padding: 40px;
-            }
-        }
-
-        /* modal styles */
-        #job-modal {
-          position: fixed; inset: 0; display: none; align-items: center; justify-content: center;
-          background: rgba(0,0,0,0.6); z-index: 9999; padding: 20px;
-        }
-        #job-modal .job-body {
-          background: #fff; color:#111; max-width:700px; width:100%; max-height:86vh; overflow:auto;
-          border-radius:10px; padding:20px; box-shadow:0 20px 60px rgba(0,0,0,0.4);
-          font-size: 14px;            /* lebih kecil */
-          text-align: center;         /* pusatkan teks paragraf/heading */
-          line-height: 1.45;
-          font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-        }
-        #job-modal .job-body h3 { margin-top:0; font-size:1.15em; text-align:center; }
-        #job-modal .job-body .job-content p { text-align:center; margin:8px 0; }
-        #job-modal .job-body .job-content ul {
-          text-align: left;           /* isi list tetap rata kiri untuk keterbacaan */
-          display: inline-block;      /* letakkan daftar sebagai blok yang terpusat */
-          margin: 12px auto;
-          padding-left: 20px;
-        }
-        #job-modal .job-body .job-content ul li {
-          font-size: 13.5px;
-          margin-bottom: 6px;
-        }
-        #job-modal .close-modal { float:right; cursor:pointer; font-weight:700; padding:4px 8px; border-radius:6px; background:#eee; }
-
-        /* timeline-section styles */
-        .timeline-section {
-          margin-top: 36px;
-          background: linear-gradient(180deg,#ffffff 0%, #fbfdff 100%);
-          padding: 26px;
-          border-radius: 12px;
-          box-shadow: 0 10px 30px rgba(10,20,30,0.06);
-        }
-        .timeline-header {
-          display:flex;
-          justify-content:space-between;
-          align-items:center;
-          gap:12px;
-          margin-bottom:18px;
-        }
-        .timeline-header h2 { font-size:1.2rem; margin:0; color:#072b2a; }
-        .timeline-header .badge { font-weight:700; padding:6px 10px; border-radius:999px; color:#fff; font-size:0.9rem; }
-        .badge.urgent { background:#d93b3b; box-shadow: 0 6px 18px rgba(217,59,59,0.12); }
-        .badge.ongoing { background:#e5a400; box-shadow: 0 6px 18px rgba(229,164,0,0.08); }
-        .badge.ready { background:#27ae60; box-shadow:0 6px 18px rgba(39,174,96,0.08); }
-        .phase-grid { display:grid; grid-template-columns:1fr; gap:12px; margin-top:12px; }
-        .phase-card { background:#fff; border-radius:10px; padding:14px; box-shadow:0 6px 18px rgba(6,38,34,0.03); }
-        .phase-meta { display:flex; gap:12px; align-items:center; justify-content:space-between; flex-wrap:wrap; }
-        .phase-meta .when { color:#07514d; font-weight:700; }
-        .division-tasks { display:grid; grid-template-columns: repeat(auto-fit,minmax(260px,1fr)); gap:12px; margin-top:12px; }
-        .div-box { background:linear-gradient(180deg,#fbfffb, #fff); padding:10px; border-radius:8px; border:1px solid rgba(5,107,27,0.06); }
-        .div-box h4 { margin:0 0 8px 0; font-size:0.95em; color:#074; }
-        .div-box ul { margin:0; padding-left:18px; font-size:0.92em; color:#273; }
-        .status-line { font-size:0.92em; color:#444; margin-top:8px; }
-        .cta-row { display:flex; gap:8px; margin-top:10px; flex-wrap:wrap; }
-        .btn-small { background:#056b4f; color:#fff; padding:6px 10px; border-radius:8px; cursor:pointer; font-weight:700; font-size:0.9rem; border:none; }
-
-        @media (max-width:720px) {
-          .timeline { padding-left:12px; }
-          .timeline-icon { left:-30px; top:12px; width:24px; height:24px; font-size:0.8rem; }
-        }
-
-        @media (max-width: 1200px) {
-            .divisi-container {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        @media (max-width: 768px) {
-            .divisi-container {
-                grid-template-columns: 1fr;
-            }
-
-            .header h1 {
-                font-size: 1.8em;
-            }
-
-            .position-box.level1 {
-                min-width: 250px;
-            }
-
-            .button-group {
-                flex-direction: column;
-            }
-
-            .btn {
-                width: 100%;
-            }
-
-            #organigram-container {
-                padding: 30px 20px;
-            }
-        }
-
-        @media print {
-            body {
-                background: white;
-                padding: 0;
-            }
-
-            .button-group {
-                display: none;
-            }
-
-            #organigram-container {
-                box-shadow: none;
-                border-radius: 0;
-                padding: 40px;
-            }
-        }
+/* slight animated gradient for header to add life */
+.header h1 {
+  background: linear-gradient(90deg, #072b2a, #0b5e4f, #072b2a);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: hue 6s linear infinite;
+}
+@keyframes hue {
+  0% { filter: hue-rotate(0deg); }
+  50% { filter: hue-rotate(30deg); }
+  100% { filter: hue-rotate(0deg); }
+}
 
     </style>
 </head>
@@ -1486,8 +1117,7 @@
 <!-- end timeline-section -->
 
             <!-- Hidden jobdesk templates (used for click popups) -->
-    <div id="job-templates" style="display:none;">
-
+<div id="job-templates" style="display:none;">
   <div class="job-item" data-name="Bey Arifin Zakaria">
     <h3>🎯 KETUA PELAKSANA 1</h3>
     <ul>
@@ -1554,357 +1184,342 @@
       <li>Membantu koordinasi permintaan logistik antar divisi</li>
     </ul>
   </div>
-;        document.getElementById('phase2').classList.add('open');      document.addEventListener('DOMContentLoaded', () => {      // auto-open phase 2 details on page load      });        });          document.getElementById(target).classList.toggle('open');          const target = button.getAttribute('data-target');        button.addEventListener('click', () => {      document.querySelectorAll('.toggle-phase').forEach(button => {    <script>    <!-- script untuk interaksi timeline -->    </style>    #job-modal .close-modal { float:right; cursor:pointer; font-weight:700; padding:4px 8px; border-radius:6px; background:#eee; }    }      margin-bottom: 6px;      font-size: 13.5px;    #job-modal .job-body .job-content ul li {    }      padding-left: 20px;      margin: 12px auto;      display: inline-block;      /* letakkan daftar sebagai blok yang terpusat */      text-align: left;           /* isi list tetap rata kiri untuk keterbacaan */    #job-modal .job-body .job-content ul {    #job-modal .job-body .job-content p { text-align:center; margin:8px 0; }    #job-modal .job-body h3 { margin-top:0; font-size:1.15em; text-align:center; }    }      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;      line-height: 1.45;      text-align: center;         /* pusatkan teks paragraf/heading */      font-size: 14px;            /* lebih kecil */      border-radius:10px; padding:20px; box-shadow:0 20px 60px rgba(0,0,0,0.4);      background: #fff; color:#111; max-width:700px; width:100%; max-height:86vh; overflow:auto;    #job-modal .job-body {    }      background: rgba(0,0,0,0.6); z-index: 9999; padding: 20px;      position: fixed; inset: 0; display: none; align-items: center; justify-content: center;    #job-modal {    /* modal styles */    <style>    <!-- modal untuk menampilkan job description --><!-- end of #job-templates --></div>  </div>    </ul>      <li>Menjaga kebersihan area makan dan membuang sampah sesuai aturan</li>      <li>Mempersiapkan, menyajikan, dan mendistribusikan konsumsi</li>    <ul>    <h3>🍽️ ANGGOTA DIVISI KONSUMSI</h3>  <div class="job-item">  </div>    </ul>      <li>Memastikan ketersediaan stok dan perlengkapan makan/minum</li>      <li>Mengelola tim layanan konsumsi dan jadwal distribusi</li>    <ul>    <h3>🍽️ KOORDINATOR 2 DIVISI KONSUMSI</h3>  <div class="job-item" data-name="Saffa Rahmalia">  </div>    </ul>      <li>Menjaga standar kebersihan dan keamanan pangan</li>      <li>Memilih vendor, menyusun menu, dan mengatur jadwal distribusi</li>      <li>Menyiapkan dan mengatur pengadaan konsumsi untuk panitia dan peserta</li>    <ul>    <h3>🍽️ KOORDINATOR 1 DIVISI KONSUMSI</h3>  <div class="job-item" data-name="Putri Wahyuni">  <!-- KONSUMSI -->  </div>    </ul>      <li>Menyusun highlight visual untuk Humas dan arsip kegiatan</li>      <li>Membuat backup ganda (hard drive & cloud) setiap hari</li>      <li>Mengumpulkan, memberi label, dan mengunggah hasil dokumentasi ke folder pusat</li>      <li>Memotret dan merekam video kegiatan sesuai rundown</li>    <ul>    <h3>📚 ANGGOTA DIVISI PDD</h3>  <div class="job-item">  </div>    </ul>      <li>Menangani editing dasar (crop, color, trimming) untuk kebutuhan cepat</li>      <li>Mengelola alur pengumpulan file, labeling, dan penyimpanan</li>      <li>Mendampingi koordinator dokumentasi di lapangan</li>    <ul>    <h3>📚 KOORDINATOR 2 DIVISI PDD</h3>  <div class="job-item" data-name="Nimas">  </div>    </ul>      <li>Koordinasi dengan Humas untuk kebutuhan publikasi materi dokumentasi</li>      <li>Memastikan backup file dan sistem penyimpanan tersusun rapi</li>      <li>Menentukan tim, peralatan, dan jadwal pengambilan dokumentasi</li>      <li>Menyusun rencana dokumentasi (foto, video, live, arsip) untuk seluruh acara</li>    <ul>    <h3>📚 KOORDINATOR 1 DIVISI PDD</h3>  <div class="job-item" data-name="Refi">  <!-- PDD (dokumentasi) -->  </div>    </ul>      <li>Membantu proses breakdown dan pengembalian perlengkapan setelah acara</li>      <li>Menangani kejadian darurat awal dan menginformasikan koordinator</li>      <li>Menjaga kebersihan dan keamanan area selama acara</li>      <li>Mengarahkan dan memandu pengunjung serta peserta selama acara</li>      <li>Mengelola tata letak booth dan membantu pemasangan perlengkapan</li>      <li>Menyiapkan dan merapikan area lokasi sebelum acara dimulai</li>    <ul>    <h3>🗺️ ANGGOTA DIVISI KORLAP</h3>  <div class="job-item">  </div>    </ul>      <li>Berkoordinasi dengan tim kebersihan dan keamanan selama acara</li>      <li>Memastikan petunjuk arah dan keamanan area jelas</li>      <li>Mengatur penempatan booth dan pengaturan alur pengunjung</li>    <ul>    <h3>🗺️ KOORDINATOR 3 DIVISI KORLAP</h3>  <div class="job-item" data-name="Ahmad Gizlan">  </div>    </ul>      <li>Menangani troubleshooting on-site</li>      <li>Mengelola area registrasi, signage, dan rute pengunjung</li>      <li>Mendukung pelaksanaan teknis lapangan dan logistik</li>    <ul>    <h3>🗺️ KOORDINATOR 2 DIVISI KORLAP</h3>  <div class="job-item" data-name="Obi">  </div>    </ul>      <li>Mengatur jadwal setup dan breakdown area</li>      <li>Koordinasi dengan keamanan, kebersihan, dan pihak venue</li>      <li>Mengelola semua logistik lapangan dan tata letak venue</li>    <ul>    <h3>🗺️ KOORDINATOR 1 DIVISI KORLAP</h3>  <div class="job-item" data-name="Farid">  <!-- KORLAP -->  </div>    </ul>      <li>Mendistribusikan informasi kepada peserta dan publik</li>      <li>Mendukung pembuatan konten, peliputan, dan publikasi acara</li>    <ul>    <h3>📢 ANGGOTA DIVISI HUMAS</h3>  <div class="job-item">  </div>    </ul>      <li>Berkolaborasi dengan dokumentasi (PDD) untuk materi visual</li>      <li>Mengorganisir dokumentasi publikasi dan materi promosi</li>      <li>Mengelola konten media sosial dan kanal komunikasi acara</li>    <ul>    <h3>📢 KOORDINATOR 3 DIVISI HUMAS</h3>  <div class="job-item" data-name="Faizatul Mubayyinah">  </div>    </ul>      <li>Memantau dan mengevaluasi efektivitas publikasi</li>      <li>Melakukan koordinasi press release dan partnership media</li>      <li>Menyusun strategi publikasi dan hubungan media</li>    <ul>    <h3>📢 KOORDINATOR 1 DIVISI HUMAS</h3>  <div class="job-item" data-name="Kevin">  <!-- HUMAS -->  </div>    </ul>      <li>Melakukan evaluasi pelaksanaan untuk laporan akhir</li>      <li>Mendampingi pelaksanaan sesuai rundown</li>      <li>Mempersiapkan area kegiatan dan perlengkapan acara</li>    <ul>    <h3>🎉 ANGGOTA DIVISI ACARA</h3>  <div class="job-item">  </div>    </ul>      <li>Mengawasi pelaksanaan acara sesuai jadwal</li>      <li>Mengatur kebutuhan panggung, sound, dan koordinasi pelaksana acara</li>      <li>Menyusun rincian teknis rundown dan alokasi waktu</li>    <ul>    <h3>🎉 KOORDINATOR 2 DIVISI ACARA</h3>  <div class="job-item" data-name="Deslina Ayu Ningtyas">  </div>    </ul>      <li>Menentukan tata ruang acara dan kebutuhan teknis</li>      <li>Memilih dan menghubungi pembicara/narasumber</li>      <li>Merancang konsep acara, rundown, dan timeline keseluruhan</li>    <ul>    <h3>🎉 KOORDINATOR 1 DIVISI ACARA</h3>      margin-bottom: 6px;
+
   <div class="job-item" data-name="Sevieka">
-    <h3>💰 BENDAHARA UMUM 1</h3>font-weight:700; padding:4px 8px; border-radius:6px; background:#eee; }
-    <ul>/style>
+    <h3>💰 BENDAHARA UMUM 1</h3>
+    <ul>
       <li>Mengelola kas utama dan pencatatan seluruh pemasukan</li>
       <li>Menyetujui pengeluaran dan membuat laporan keuangan</li>
-      <li>Berkoordinasi dengan bendahara divisi untuk rekonsiliasi</li>ody" role="dialog" aria-modal="true">
+      <li>Berkoordinasi dengan bendahara divisi untuk rekonsiliasi</li>
     </ul>
   </div>
 
   <div class="job-item" data-name="Arina Sa'adini Ahmadah">
-    <h3>💰 BENDAHARA UMUM 2</h3>2px;"></div>
+    <h3>💰 BENDAHARA UMUM 2</h3>
     <ul>
       <li>Membantu pencatatan kas harian dan membuat rekap</li>
       <li>Menyiapkan bukti transaksi dan dokumentasi keuangan</li>
     </ul>
   </div>
-n escapeRegExp(string) {
-  <div class="job-item" data-name="Novy Rizky Ardelia">lace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+  <div class="job-item" data-name="Novy Rizky Ardelia">
     <h3>💰 BENDAHARA UMUM 3</h3>
     <ul>
       <li>Menangani kas kecil dan pengeluaran operasional</li>
-      <li>Mendukung penyusunan laporan kas harian</li>et;
-    </ul>('person-name') || t.classList.contains('anggota-name'))) {
-  </div> = (t.dataset.person || t.textContent || '').trim();
-
-  <!-- ACARA -->ar found = templates.find(function(item){
-  <div class="job-item" data-name="Rafi"> || '').trim();
-    <h3>🎉 KOORDINATOR 1 DIVISI ACARA</h3>werCase()) return true; // exact match by data-name
-    <ul>   // fallback: match whole word in innerText to avoid substring collisions
-      <li>Merancang konsep acara, rundown, dan timeline keseluruhan</li>          if (name) {
-      <li>Menentukan tata ruang acara dan kebutuhan teknis</li>;
-      <li>Memilih dan menghubungi pembicara/narasumber</li>
+      <li>Mendukung penyusunan laporan kas harian</li>
     </ul>
   </div>
- });
-  <div class="job-item" data-name="Deslina Ayu Ningtyas"> var modal = document.getElementById('job-modal');
-    <h3>🎉 KOORDINATOR 2 DIVISI ACARA</h3>        var content = modal.querySelector('.job-content');
+
+  <!-- ACARA -->
+  <div class="job-item" data-name="Rafi">
+    <h3>🎉 KOORDINATOR 1 DIVISI ACARA</h3>
     <ul>
-      <li>Menyusun rincian teknis rundown dan alokasi waktu</li>ound.innerHTML;
+      <li>Merancang konsep acara, rundown, dan timeline keseluruhan</li>
+      <li>Memilih dan menghubungi pembicara/narasumber</li>
+      <li>Menentukan tata ruang acara dan kebutuhan teknis</li>
+    </ul>
+  </div>
+
+  <div class="job-item" data-name="Deslina Ayu Ningtyas">
+    <h3>🎉 KOORDINATOR 2 DIVISI ACARA</h3>
+    <ul>
+      <li>Menyusun rincian teknis rundown dan alokasi waktu</li>
       <li>Mengatur kebutuhan panggung, sound, dan koordinasi pelaksana acara</li>
-      <li>Melakukan evaluasi pelaksanaan untuk laporan akhir</li>ate untuk: <strong>' + name + '</strong></p>';
-    </ul> }
-  </div> modal.style.display = 'flex';
-.setAttribute('aria-hidden','false');
-  <div class="job-item" data-name="Kevin">      }
+      <li>Mengawasi pelaksanaan acara sesuai jadwal</li>
+    </ul>
+  </div>
+
+  <div class="job-item">
+    <h3>🎉 ANGGOTA DIVISI ACARA</h3>
+    <ul>
+      <li>Mempersiapkan area kegiatan dan perlengkapan acara</li>
+      <li>Mendampingi pelaksanaan sesuai rundown</li>
+      <li>Melakukan evaluasi pelaksanaan untuk laporan akhir</li>
+    </ul>
+  </div>
+
+  <!-- HUMAS -->
+  <div class="job-item" data-name="Kevin">
     <h3>📢 KOORDINATOR 1 DIVISI HUMAS</h3>
-    <ul>id === 'job-modal' || t.classList.contains('close-modal')) {
-      <li>Menyusun strategi publikasi dan hubungan media</li>= document.getElementById('job-modal');
+    <ul>
+      <li>Menyusun strategi publikasi dan hubungan media</li>
       <li>Melakukan koordinasi press release dan partnership media</li>
-      <li>Memantau dan mengevaluasi efektivitas publikasi</li>n','true');
+      <li>Memantau dan mengevaluasi efektivitas publikasi</li>
     </ul>
   </div>
 
   <div class="job-item" data-name="Faizatul Mubayyinah">
     <h3>📢 KOORDINATOR 3 DIVISI HUMAS</h3>
     <ul>
-      <li>Mengelola konten media sosial dan kanal komunikasi acara</li>dal.style.display = 'none'; modal.setAttribute('aria-hidden','true'); }
-      <li>Berkolaborasi dengan dokumentasi (PDD) untuk materi visual</li>
+      <li>Mengelola konten media sosial dan kanal komunikasi acara</li>
       <li>Mengorganisir dokumentasi publikasi dan materi promosi</li>
+      <li>Berkolaborasi dengan dokumentasi (PDD) untuk materi visual</li>
     </ul>
   </div>
 
+  <div class="job-item">
+    <h3>📢 ANGGOTA DIVISI HUMAS</h3>
+    <ul>
+      <li>Mendukung pembuatan konten, peliputan, dan publikasi acara</li>
+      <li>Mendistribusikan informasi kepada peserta dan publik</li>
+    </ul>
+  </div>
+
+  <!-- KORLAP -->
   <div class="job-item" data-name="Farid">
-    <h3>🗺️ KOORDINATOR 1 DIVISI KORLAP</h3>on(){
-    <ul> toggles = document.querySelectorAll('#timeline-section .timeline-toggle');
-      <li>Mengelola semua logistik lapangan dan tata letak venue</li>{
+    <h3>🗺️ KOORDINATOR 1 DIVISI KORLAP</h3>
+    <ul>
+      <li>Mengelola semua logistik lapangan dan tata letak venue</li>
       <li>Koordinasi dengan keamanan, kebersihan, dan pihak venue</li>
-      <li>Mengatur jadwal setup dan breakdown area</li>item');
-    </ul> var details = item.querySelector('.timeline-details');
-  </div>ar isOpen = details.classList.contains('open');
-            // close any other open if you want single-open behavior - optional
-  <div class="job-item" data-name="Obi">     // document.querySelectorAll('#timeline-section .timeline-details.open').forEach(d=>{ if(d!==details){ d.classList.remove('open'); }});
-    <h3>🗺️ KOORDINATOR 2 DIVISI KORLAP</h3>     if(isOpen){
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</html></body>    </script>      })();        });          });            document.querySelectorAll('#timeline-section .timeline-details.open').forEach(function(d){ d.classList.remove('open'); });          h.addEventListener('dblclick', function(){        document.querySelectorAll('#timeline-section .timeline-header').forEach(function(h){        // small helper: collapse all when ctrl+click on header        if(p1) p1.classList.add('open');        var p1 = document.getElementById('phase1');        // open phase1 by default (urgent)        });          });            btn.textContent = el.classList.contains('open') ? 'Sembunyikan rincian ▲' : 'Tampilkan rincian ▼';            el.classList.toggle('open');            if (!el) return;            var el = document.getElementById(id);            var id = btn.getAttribute('data-target');          btn.addEventListener('click', function(){        document.querySelectorAll('#timeline-section .toggle-phase').forEach(function(btn){        // toggle each phase panel      (function(){    <script>    <!-- toggle timeline details -->    </script>    });      }        if (modal) { modal.style.display = 'none'; modal.setAttribute('aria-hidden','true'); }        var modal = document.getElementById('job-modal');      if (e.key === 'Escape') {    document.addEventListener('keydown', function(e){    });      }        modal.setAttribute('aria-hidden','true');        modal.style.display = 'none';        var modal = document.getElementById('job-modal');      if (t.id === 'job-modal' || t.classList.contains('close-modal')) {      }        modal.setAttribute('aria-hidden','false');        modal.style.display = 'flex';        }          content.innerHTML = '<h3>Deskripsi tugas belum tersedia</h3><p>Tidak ditemukan template untuk: <strong>' + name + '</strong></p>';        } else {          content.innerHTML = found.innerHTML;        if (found) {        var content = modal.querySelector('.job-content');        var modal = document.getElementById('job-modal');        });          return false;          }            return re.test(item.innerText);            var re = new RegExp('\\b' + escapeRegExp(name) + '\\b', 'i');          if (name) {          // fallback: match whole word in innerText to avoid substring collisions          if (dn && dn.toLowerCase() === name.toLowerCase()) return true; // exact match by data-name          var dn = (item.dataset.name || '').trim();        var found = templates.find(function(item){        var templates = Array.from(document.querySelectorAll('#job-templates .job-item'));        var name = (t.dataset.person || t.textContent || '').trim();      if (t.classList && (t.classList.contains('person-name') || t.classList.contains('anggota-name'))) {      var t = e.target;    document.addEventListener('click', function(e){    }      return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');    function escapeRegExp(string) {    /* helper untuk escape regex */    <script>    </div>      </div>        <div class="job-content" style="margin-top:12px;"></div>        </div>          <span class="close-modal" title="Tutup">✕</span>          <strong>Deskripsi Tugas</strong>        <div style="display:flex; justify-content:space-between; align-items:center;">      <div class="job-body" role="dialog" aria-modal="true">    <div id="job-modal" aria-hidden="true"></div>  <!-- end of #job-templates -->  </div>    </ul>      <li>Mengelola tata letak booth dan membantu pemasangan perlengkapan</li>      <li>Mengarahkan dan memandu pengunjung serta peserta selama acara</li>      <li>Menjaga kebersihan dan keamanan area selama acara</li>    <ul>    <h3>🗺️ ANGGOTA DIVISI KORLAP</h3>  <div class="job-item" data-name="Juanda Caesar Putra">  </div>    </ul>      <li>Mengelola tata letak booth dan membantu pemasangan perlengkapan</li>      <li>Mengarahkan dan memandu pengunjung serta peserta selama acara</li>      <li>Menjaga kebersihan dan keamanan area selama acara</li>    <ul>    <h3>🗺️ ANGGOTA DIVISI KORLAP</h3>  <div class="job-item" data-name="Jamilah Nur Sakhi">  </div>    </ul>      <li>Mengelola tata letak booth dan membantu pemasangan perlengkapan</li>      <li>Mengarahkan dan memandu pengunjung serta peserta selama acara</li>      <li>Menjaga kebersihan dan keamanan area selama acara</li>    <ul>    <h3>🗺️ ANGGOTA DIVISI KORLAP</h3>  <div class="job-item" data-name="Bunga Adelia Putri Dhevia">  </div>    </ul>      <li>Mengelola tata letak booth dan membantu pemasangan perlengkapan</li>      <li>Mengarahkan dan memandu pengunjung serta peserta selama acara</li>      <li>Menjaga kebersihan dan keamanan area selama acara</li>    <ul>    <h3>🗺️ ANGGOTA DIVISI KORLAP</h3>  <div class="job-item" data-name="Qolbi Atsir Athaullah">  </div>    </ul>      <li>Mengelola tata letak booth dan membantu pemasangan perlengkapan</li>      <li>Mengarahkan dan memandu pengunjung serta peserta selama acara</li>      <li>Menjaga kebersihan dan keamanan area selama acara</li>    <ul>    <h3>🗺️ ANGGOTA DIVISI KORLAP</h3>  <div class="job-item" data-name="Rizky Afriza">  </div>    </ul>      <li>Membantu proses breakdown dan pengembalian perlengkapan setelah acara</li>      <li>Mengumpulkan, memberi label, dan mengunggah hasil dokumentasi ke folder pusat</li>      <li>Memotret dan merekam video kegiatan sesuai rundown</li>    <ul>    <h3>📚 ANGGOTA DIVISI PDD</h3>  <div class="job-item" data-name="Adinda">  </div>    </ul>      <li>Membantu proses breakdown dan pengembalian perlengkapan setelah acara</li>      <li>Mengumpulkan, memberi label, dan mengunggah hasil dokumentasi ke folder pusat</li>      <li>Memotret dan merekam video kegiatan sesuai rundown</li>    <ul>    <h3>📚 ANGGOTA DIVISI PDD</h3>  <div class="job-item" data-name="Rahil Shafarina Marella">  </div>    </ul>      <li>Membantu proses breakdown dan pengembalian perlengkapan setelah acara</li>      <li>Mengumpulkan, memberi label, dan mengunggah hasil dokumentasi ke folder pusat</li>      <li>Memotret dan merekam video kegiatan sesuai rundown</li>    <ul>    <h3>📚 ANGGOTA DIVISI PDD</h3>  <div class="job-item" data-name="Adinda Salsabila Indra">  </div>    </ul>      <li>Membantu proses breakdown dan pengembalian perlengkapan setelah acara</li>      <li>Mengumpulkan, memberi label, dan mengunggah hasil dokumentasi ke folder pusat</li>      <li>Memotret dan merekam video kegiatan sesuai rundown</li>    <ul>    <h3>📚 ANGGOTA DIVISI PDD</h3>  <div class="job-item" data-name="Adinda Laila Fitria">  </div>    </ul>      <li>Membantu proses breakdown dan pengembalian perlengkapan setelah acara</li>      <li>Mengumpulkan, memberi label, dan mengunggah hasil dokumentasi ke folder pusat</li>      <li>Memotret dan merekam video kegiatan sesuai rundown</li>    <ul>    <h3>📚 ANGGOTA DIVISI PDD</h3>  <div class="job-item" data-name="Devita Virnina Putri">  </div>    </ul>      <li>Mempersiapkan, menyajikan, dan mendistribusikan konsumsi</li>      <li>Memastikan kebersihan area makan dan membuang sampah sesuai aturan</li>    <ul>    <h3>🍽️ ANGGOTA DIVISI KONSUMSI</h3>  <div class="job-item" data-name="Muhammad Sofyan Sauri">  </div>    </ul>      <li>Mempersiapkan, menyajikan, dan mendistribusikan konsumsi</li>      <li>Memastikan kebersihan area makan dan membuang sampah sesuai aturan</li>    <ul>    <h3>🍽️ ANGGOTA DIVISI KONSUMSI</h3>  <div class="job-item" data-name="Muhammad Najib Sa'adi">  </div>    </ul>      <li>Mempersiapkan, menyajikan, dan mendistribusikan konsumsi</li>      <li>Memastikan kebersihan area makan dan membuang sampah sesuai aturan</li>    <ul>    <h3>🍽️ ANGGOTA DIVISI KONSUMSI</h3>  <div class="job-item" data-name="Noor Shania Raziqa">  </div>    </ul>      <li>Mempersiapkan, menyajikan, dan mendistribusikan konsumsi</li>      <li>Memastikan kebersihan area makan dan membuang sampah sesuai aturan</li>    <ul>    <h3>🍽️ ANGGOTA DIVISI KONSUMSI</h3>  <div class="job-item" data-name="Adinda Cinta Dwi Yurlita">  </div>    </ul>      <li>Menjaga kebersihan area makan dan membuang sampah sesuai aturan</li>      <li>Memastikan ketersediaan stok dan perlengkapan makan/minum</li>      <li>Mengelola tim layanan konsumsi dan jadwal distribusi</li>    <ul>    <h3>🍽️ KOORDINATOR 2 DIVISI KONSUMSI</h3>  <div class="job-item" data-name="Saffa Rahmalia">  </div>    </ul>      <li>Menjaga standar kebersihan dan keamanan pangan</li>      <li>Memilih vendor, menyusun menu, dan mengatur jadwal distribusi</li>      <li>Menyiapkan dan mengatur pengadaan konsumsi untuk panitia dan peserta</li>    <ul>    <h3>🍽️ KOORDINATOR 1 DIVISI KONSUMSI</h3>  <div class="job-item" data-name="Putri Wahyuni">  <!-- KONSUMSI -->  </div>    </ul>      <li>Menangani editing dasar (crop, color, trimming) untuk kebutuhan cepat</li>      <li>Mengelola alur pengumpulan file, labeling, dan penyimpanan</li>      <li>Mendampingi koordinator dokumentasi di lapangan</li>    <ul>    <h3>📚 KOORDINATOR 2 DIVISI PDD</h3>  <div class="job-item" data-name="Nimas">  </div>    </ul>      <li>Koordinasi dengan Humas untuk kebutuhan publikasi materi dokumentasi</li>      <li>Memastikan backup file dan sistem penyimpanan tersusun rapi</li>      <li>Menentukan tim, peralatan, dan jadwal pengambilan dokumentasi</li>      <li>Menyusun rencana dokumentasi (foto, video, live, arsip) untuk seluruh acara</li>    <ul>    <h3>📚 KOORDINATOR 1 DIVISI PDD</h3>  <div class="job-item" data-name="Refi">  <!-- PDD (dokumentasi) -->  </div>    </ul>      <li>Mengelola tata letak booth dan membantu pemasangan perlengkapan</li>      <li>Mengarahkan dan memandu pengunjung serta peserta selama acara</li>      <li>Menjaga kebersihan dan keamanan area selama acara</li>    <ul>    <h3>🗺️ KOORDINATOR 3 DIVISI KORLAP</h3>  <div class="job-item" data-name="Ahmad Gizlan">  </div>    </ul>      <li>Menangani troubleshooting on-site</li>      <li>Mengelola area registrasi, signage, dan rute pengunjung</li>      <li>Mendukung pelaksanaan teknis lapangan dan logistik</li>    <ul>              details.classList.remove('open');
-              btn.textContent = 'Tampilkan rincian ▼';
-            } else {
-              details.classList.add('open');
-              btn.textContent = 'Sembunyikan rincian ▲';
-            }
-          });
-        });
-        // open first item by default
-        var first = document.querySelector('#timeline-section .timeline-item .timeline-details');
-        if(first) first.classList.add('open');
-      })();
-    </script>
+      <li>Mengatur jadwal setup dan breakdown area</li>
+    </ul>
+  </div>
+
+  <div class="job-item" data-name="Obi">
+    <h3>🗺️ KOORDINATOR 2 DIVISI KORLAP</h3>
+    <ul>
+      <li>Mendukung pelaksanaan teknis lapangan dan logistik</li>
+      <li>Mengelola area registrasi, signage, dan rute pengunjung</li>
+      <li>Menangani troubleshooting on-site</li>
+    </ul>
+  </div>
+
+  <div class="job-item" data-name="Ahmad Gizlan">
+    <h3>🗺️ KOORDINATOR 3 DIVISI KORLAP</h3>
+    <ul>
+      <li>Mengatur penempatan booth dan pengaturan alur pengunjung</li>
+      <li>Memastikan petunjuk arah dan keamanan area jelas</li>
+      <li>Berkoordinasi dengan tim kebersihan dan keamanan selama acara</li>
+    </ul>
+  </div>
+
+  <div class="job-item">
+    <h3>🗺️ ANGGOTA DIVISI KORLAP</h3>
+    <ul>
+      <li>Menyiapkan dan merapikan area lokasi sebelum acara dimulai</li>
+      <li>Mengelola tata letak booth dan membantu pemasangan perlengkapan</li>
+      <li>Mengarahkan dan memandu pengunjung serta peserta selama acara</li>
+      <li>Menjaga kebersihan dan keamanan area selama acara</li>
+      <li>Menangani kejadian darurat awal dan menginformasikan koordinator</li>
+      <li>Membantu proses breakdown dan pengembalian perlengkapan setelah acara</li>
+    </ul>
+  </div>
+
+  <!-- PDD (dokumentasi) -->
+  <div class="job-item" data-name="Refi">
+    <h3>📚 KOORDINATOR 1 DIVISI PDD</h3>
+    <ul>
+      <li>Menyusun rencana dokumentasi (foto, video, live, arsip) untuk seluruh acara</li>
+      <li>Menentukan tim, peralatan, dan jadwal pengambilan dokumentasi</li>
+      <li>Memastikan backup file dan sistem penyimpanan tersusun rapi</li>
+      <li>Koordinasi dengan Humas untuk kebutuhan publikasi materi dokumentasi</li>
+    </ul>
+  </div>
+
+  <div class="job-item" data-name="Nimas">
+    <h3>📚 KOORDINATOR 2 DIVISI PDD</h3>
+    <ul>
+      <li>Mendampingi koordinator dokumentasi di lapangan</li>
+      <li>Mengelola alur pengumpulan file, labeling, dan penyimpanan</li>
+      <li>Menangani editing dasar (crop, color, trimming) untuk kebutuhan cepat</li>
+    </ul>
+  </div>
+
+  <div class="job-item">
+    <h3>📚 ANGGOTA DIVISI PDD</h3>
+    <ul>
+      <li>Memotret dan merekam video kegiatan sesuai rundown</li>
+      <li>Mengumpulkan, memberi label, dan mengunggah hasil dokumentasi ke folder pusat</li>
+      <li>Membuat backup ganda (hard drive & cloud) setiap hari</li>
+      <li>Menyusun highlight visual untuk Humas dan arsip kegiatan</li>
+    </ul>
+  </div>
+
+  <!-- KONSUMSI -->
+  <div class="job-item" data-name="Putri Wahyuni">
+    <h3>🍽️ KOORDINATOR 1 DIVISI KONSUMSI</h3>
+    <ul>
+      <li>Menyiapkan dan mengatur pengadaan konsumsi untuk panitia dan peserta</li>
+      <li>Memilih vendor, menyusun menu, dan mengatur jadwal distribusi</li>
+      <li>Menjaga standar kebersihan dan keamanan pangan</li>
+    </ul>
+  </div>
+
+  <div class="job-item" data-name="Saffa Rahmalia">
+    <h3>🍽️ KOORDINATOR 2 DIVISI KONSUMSI</h3>
+    <ul>
+      <li>Mengelola tim layanan konsumsi dan jadwal distribusi</li>
+      <li>Memastikan ketersediaan stok dan perlengkapan makan/minum</li>
+    </ul>
+  </div>
+
+  <div class="job-item">
+    <h3>🍽️ ANGGOTA DIVISI KONSUMSI</h3>
+    <ul>
+      <li>Mempersiapkan, menyajikan, dan mendistribusikan konsumsi</li>
+      <li>Menjaga kebersihan area makan dan membuang sampah sesuai aturan</li>
+    </ul>
+  </div>
+</div>
+<!-- end of #job-templates -->
+
+<!-- modal untuk menampilkan job description -->
+<div id="job-modal" aria-hidden="true">
+  <div class="job-body" role="dialog" aria-modal="true">
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+      <strong>Deskripsi Tugas</strong>
+      <span class="close-modal" title="Tutup">✕</span>
+    </div>
+    <div class="job-content" style="margin-top:12px;"></div>
+  </div>
+</div>
+
+<script>
+/* helper untuk escape regex */
+function escapeRegExp(string) {
+  return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+/* klik nama -> cari template yang mengandung nama dan tampilkan */
+document.addEventListener('click', function(e){
+  var t = e.target;
+  if (t.classList && (t.classList.contains('person-name') || t.classList.contains('anggota-name'))) {
+    var name = (t.dataset.person || t.textContent || '').trim();
+    var templates = Array.from(document.querySelectorAll('#job-templates .job-item'));
+    var found = templates.find(function(item){
+      var dn = (item.dataset.name || '').trim();
+      if (dn && dn.toLowerCase() === name.toLowerCase()) return true; // exact match by data-name
+      if (name) {
+        var re = new RegExp('\\b' + escapeRegExp(name) + '\\b', 'i');
+        return re.test(item.innerText);
+      }
+      return false;
+    });
+    var modal = document.getElementById('job-modal');
+    var content = modal.querySelector('.job-content');
+    if (found) {
+      content.innerHTML = found.innerHTML;
+    } else {
+      content.innerHTML = '<h3>Deskripsi tugas belum tersedia</h3><p>Tidak ditemukan template untuk: <strong>' + name + '</strong></p>';
+    }
+    modal.style.display = 'flex';
+    modal.setAttribute('aria-hidden','false');
+  }
+
+  if (t.id === 'job-modal' || t.classList.contains('close-modal')) {
+    var modal = document.getElementById('job-modal');
+    modal.style.display = 'none';
+    modal.setAttribute('aria-hidden','true');
+  }
+});
+
+// ESC untuk tutup
+document.addEventListener('keydown', function(e){
+  if (e.key === 'Escape') {
+    var modal = document.getElementById('job-modal');
+    if (modal) { modal.style.display = 'none'; modal.setAttribute('aria-hidden','true'); }
+  }
+});
+</script>
+
+<!-- toggle timeline details -->
+<script>
+(function(){
+  document.querySelectorAll('#timeline-section .toggle-phase').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var id = btn.getAttribute('data-target');
+      var el = document.getElementById(id);
+      if (!el) return;
+      el.classList.toggle('open');
+      btn.textContent = el.classList.contains('open') ? 'Sembunyikan rincian ▲' : 'Tampilkan rincian ▼';
+    });
+  });
+  // buka phase1 dan phase2 default
+  var p1 = document.getElementById('phase1');
+  if (p1) p1.classList.add('open');
+  var p2 = document.getElementById('phase2');
+  if (p2) p2.classList.add('open');
+  // helper: double-click header untuk collapse all
+  var header = document.querySelector('#timeline-section .timeline-header');
+  if (header) header.addEventListener('dblclick', function(){
+    document.querySelectorAll('#timeline-section .timeline-details.open').forEach(function(d){ d.classList.remove('open'); });
+  });
+})();
+</script>
+
+<!-- enhancement scripts -->
+<script>
+(function(){
+  // reveal on scroll
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if (e.isIntersecting) {
+        e.target.classList.add('in-view');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.15 });
+
+  // target elements for reveal
+  var revealTargets = document.querySelectorAll('.position-box, .phase-card, .div-box');
+  revealTargets.forEach(function(el){
+    el.classList.add('animate-reveal');
+    io.observe(el);
+  });
+
+  // add stagger effect for phase-card children when card becomes visible
+  var phaseCards = document.querySelectorAll('.phase-card');
+  phaseCards.forEach(function(card){
+    var obs = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if (en.isIntersecting) {
+          card.classList.add('in-view');
+          obs.unobserve(card);
+        }
+      });
+    }, { threshold: 0.25 });
+    obs.observe(card);
+  });
+
+  // modal open/close animation via MutationObserver on job-modal attributes
+  var modal = document.getElementById('job-modal');
+  if (modal) {
+    var jobBody = modal.querySelector('.job-body');
+    var mo = new MutationObserver(function(mutations){
+      mutations.forEach(function(m){
+        var visible = modal.style.display !== 'none' && modal.getAttribute('aria-hidden') === 'false';
+        if (visible) jobBody.classList.add('open'); else jobBody.classList.remove('open');
+      });
+    });
+    mo.observe(modal, { attributes: true, attributeFilter: ['style','aria-hidden'] });
+  }
+
+  // subtle 3D hover tilt for position-box
+  document.querySelectorAll('.position-box').forEach(function(pb){
+    var reset;
+    pb.addEventListener('mousemove', function(e){
+      var r = pb.getBoundingClientRect();
+      var px = (e.clientX - r.left) / r.width;
+      var py = (e.clientY - r.top) / r.height;
+      var rx = (py - 0.5) * 6; // rotateX
+      var ry = (px - 0.5) * 6; // rotateY
+      pb.style.transform = 'translateY(-6px) rotateX(' + (-rx) + 'deg) rotateY(' + ry + 'deg) scale(1.01)';
+      clearTimeout(reset);
+      reset = setTimeout(function(){ pb.style.transform = ''; }, 250);
+    });
+    pb.addEventListener('mouseleave', function(){
+      pb.style.transform = '';
+    });
+  });
+
+  // small accessibility: keyboard focus reveal
+  document.addEventListener('focusin', function(e){
+    var p = e.target.closest('.position-box, .phase-card, .div-box');
+    if (p) p.classList.add('in-view');
+  });
+
+})();
+</script>
 
 </body>
 </html>
